@@ -45,7 +45,7 @@ public class Server extends ScriptObject {
             
             while(true){
                 clientSocket = serverSocket.accept();
-                final boolean dualFields;
+                
                
                 
                 ObjectMapper mapper = new ObjectMapper();
@@ -55,6 +55,10 @@ public class Server extends ScriptObject {
                     LoginHandler login = new LoginHandler(clientSocket, this, message);
                     clientsOnLogin.add(login);
                     new Thread(login).start();
+                }
+                
+                if(message.type == "goingToChat"){
+                    ChatHandler chat = new ChatHandler();
                 }
                 
                 
