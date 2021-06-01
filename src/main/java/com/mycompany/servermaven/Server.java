@@ -62,10 +62,7 @@ public class Server extends ScriptObject {
                 }
                 
                 
-                ClientHandler client = new ClientHandler(clientSocket, this);
-                clients.add(client);
-                
-                new Thread(client).start();
+               
             }
         } catch (IOException ex) {
             Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
