@@ -51,14 +51,14 @@ public class Server extends ScriptObject {
                 ObjectMapper mapper = new ObjectMapper();
                 JInputMessage message = mapper.readValue(clientSocket.toString(), JInputMessage.class);
                 
-                if(message.type == "login"){
+                if(message.type.equals("login")){
                     LoginHandler login = new LoginHandler(clientSocket, this, message);
                     clientsOnLogin.add(login);
                     new Thread(login).start();
                 }
                 
-                if(message.type == "goingToChat"){
-                    ChatHandler chat = new ChatHandler();
+                if(message.type.equals("goingToChat")){
+                    ChatHandler chat = new ChatHandler(message.chatID);
                 }
                 
                 

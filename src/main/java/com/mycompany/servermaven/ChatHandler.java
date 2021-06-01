@@ -10,6 +10,10 @@ package com.mycompany.servermaven;
  * @author lalal
  */
 public class ChatHandler implements Runnable {
+    public ChatHandler(int chat_id){
+        
+    }
+    
     @Override
     public void run(){
         
