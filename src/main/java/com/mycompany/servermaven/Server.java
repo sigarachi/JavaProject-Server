@@ -61,7 +61,12 @@ public class Server extends ScriptObject {
                     ChatHandler chat = new ChatHandler(message.chatID);
                 }
                 
-                
+                if(message.type.equals("messageRecived")){
+                    ClientHandler client = new ClientHandler(clientSocket, this);
+                    clients.add(client);
+
+                    new Thread(client).start();
+                }
                
             }
         } catch (IOException ex) {
