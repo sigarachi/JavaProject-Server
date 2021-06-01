@@ -65,7 +65,7 @@ public class Server extends ScriptObject {
                 }
                 
                 if(message.type.equals("clientOnline")){
-                    ClientHandler client = new ClientHandler(clientSocket, this);
+                    ClientHandler client = new ClientHandler(clientSocket, this, message.userID);
                     clients.add(client);
 
                     new Thread(client).start();

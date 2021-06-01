@@ -22,6 +22,8 @@ public class ClientHandler implements Runnable {
     private PrintWriter messageOut;
     private Scanner messageIn;
     
+    private User user;
+    
     private static final String HOST = "localhost";
     private static final int PORT = 5000;
     
@@ -29,13 +31,16 @@ public class ClientHandler implements Runnable {
     
     private static int clients_count = 0;
     
-    public ClientHandler(Socket socket, Server server){
+    public ClientHandler(Socket socket, Server server, String userID){
         try{
             clients_count++;
+            Object obj = userID;
+            
             this.server = server;
             this.clientSocket =socket;
             this.messageOut = new PrintWriter(socket.getOutputStream());
             this.messageIn = new Scanner(socket.getInputStream());
+            this.user = new User(Integer.parseInt(userID));
         }catch(IOException ex){
             ex.printStackTrace();
         }

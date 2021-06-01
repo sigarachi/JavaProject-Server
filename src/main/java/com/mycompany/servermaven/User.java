@@ -10,5 +10,9 @@ package com.mycompany.servermaven;
  * @author lalal
  */
 public class User {
+    private int userID;
     
+    public User(int userID){
+        this.userID = userID;
+    }
 }
