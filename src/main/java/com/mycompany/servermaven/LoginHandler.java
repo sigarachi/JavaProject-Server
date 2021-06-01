@@ -59,6 +59,6 @@ public class LoginHandler implements Runnable {
     
     private void close(){
         //Здесь допишем сообщение о резульате авторизации
-        server.removeClient(this);
+        server.removeClientOnLogin(this);
     }
 }

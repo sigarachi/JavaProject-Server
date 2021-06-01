@@ -95,5 +95,9 @@ public class Server extends ScriptObject {
       clients.remove(client);
     }
     
+    public void removeClientOnLogin(LoginHandler login){
+        clientsOnLogin.remove(login);
+    }
+    
     
 }
