@@ -9,6 +9,9 @@ package com.mycompany.servermaven;
  *
  * @author lalal
  */
-public class ChatHandler {
-    
+public class ChatHandler implements Runnable {
+    @Override
+    public void run(){
+        
+    }
 }
