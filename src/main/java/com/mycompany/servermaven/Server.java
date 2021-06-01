@@ -29,7 +29,7 @@ import jdk.nashorn.internal.runtime.ScriptObject;
 public class Server extends ScriptObject {
     static final int PORT = 5000;
     private ArrayList<ClientHandler> clients = new ArrayList<ClientHandler>();
-    
+    private ArrayList<LoginHandler> clientsOnLogin = new ArrayList<LoginHandler>();
     
     public Server(){
         Socket clientSocket = null;
@@ -53,6 +53,7 @@ public class Server extends ScriptObject {
                 
                 if(message.type == "login"){
                     LoginHandler login = new LoginHandler(clientSocket, this, message);
+                    clientsOnLogin.add(login);
                     new Thread(login).start();
                 }
                 
