@@ -11,7 +11,6 @@ package com.mycompany.servermaven;
  */
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -65,7 +64,7 @@ public class Server extends ScriptObject {
                     new Thread(chat).start();
                 }
                 
-                if(message.type.equals("messageRecived")){
+                if(message.type.equals("clientOnline")){
                     ClientHandler client = new ClientHandler(clientSocket, this);
                     clients.add(client);
 
