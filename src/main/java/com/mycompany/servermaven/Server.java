@@ -50,17 +50,12 @@ public class Server extends ScriptObject {
 
         Connection conDatabase = null;
         
+        
+        
+        
         try {
             Class.forName(drvName);
             conDatabase = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        
-        try {
             serverSocket = new ServerSocket(PORT);
             System.out.println("Server started on port = " + PORT);
             
@@ -92,6 +87,10 @@ public class Server extends ScriptObject {
                
             }
         } catch (IOException ex) {
+            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
             Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
         }
         finally{
