@@ -17,7 +17,9 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author lalal
+ * @author1 lalal
+ * @author2 Toropchinov
+ * 
  */
 public class LoginHandler implements Runnable {
     private Server server;
@@ -29,8 +31,6 @@ public class LoginHandler implements Runnable {
     private PrintWriter messageToClient;
     
     private Connection conDatabase;
-    
-    
     
     public LoginHandler(Socket clientSocket, Server server, JInputMessage auth, Connection conDb){
         
@@ -59,13 +59,12 @@ public class LoginHandler implements Runnable {
             st.executeQuery(csql);
             ResultSet rs = st.executeQuery(csql);
             
+            //вернули userID и user_login
             while(rs.next()){
                 int id = rs.getInt ("userID");
                 String login = rs.getString("user_login");
             break;
             }
-
-                        
 
         }catch(Exception ex){
             ex.getStackTrace();

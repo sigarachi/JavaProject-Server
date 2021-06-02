@@ -72,7 +72,7 @@ public class Server extends ScriptObject {
                 }
                 
                 if(message.type.equals("message")){
-                    ChatHandler chat = new ChatHandler(message.chatID, clients, Integer.parseInt(message.firstUserID), Integer.parseInt(message.secondUserID),message.userMessage);
+                    ChatHandler chat = new ChatHandler(message.chatID, clients, Integer.parseInt(message.firstUserID), Integer.parseInt(message.secondUserID),message.userMessage, conDatabase);
                     
                     new Thread(chat).start();
                     
