@@ -14,13 +14,13 @@ import java.util.ArrayList;
 public class ChatHandler implements Runnable {
     private ArrayList<ClientHandler> clients;
     private int chatID;
-    private int userID;
+    private int firstUserID;
     private String userMessage;
     
-    public ChatHandler(int chatID, ArrayList clients, int userID, String userMessage){
+    public ChatHandler(int chatID, ArrayList clients, int firstUserID, int secondUserID ,String userMessage){
         this.clients = clients;
         this.chatID = chatID;
-        this.userID = userID;
+        this.firstUserID = firstUserID;
     }
     
   
@@ -28,7 +28,13 @@ public class ChatHandler implements Runnable {
    public void run(){
        try{
            while(true){
+               boolean chatFounded = false;
                //Ищем чат по chatID в бд и создаем новое сообщение с данным id пользователя и текстом
+               
+               
+               if(!chatFounded){
+                   this.createNew();
+               }
                
               /* Это код ответа, он будет дописан после бд
               for(int i = 0; i < clients.size(); i++){
@@ -45,6 +51,11 @@ public class ChatHandler implements Runnable {
    }
    
    private void sendResponse(){
+       
+   }
+   
+   private void createNew(){
+       //Пишем запрос к бд , где создаем новый объект чата и добавляем туда два userID
        
    }
     

@@ -72,18 +72,20 @@ public class Server extends ScriptObject {
                 }
                 
                 if(message.type.equals("message")){
-                    ChatHandler chat = new ChatHandler(message.chatID, clients, Integer.parseInt(message.userID), message.userMessage);
+                    ChatHandler chat = new ChatHandler(message.chatID, clients, Integer.parseInt(message.firstUserID), Integer.parseInt(message.secondUserID),message.userMessage);
                     
                     new Thread(chat).start();
                     
                 }
                 
                 if(message.type.equals("clientOnline")){
-                    ClientHandler client = new ClientHandler(clientSocket, this, message.userID);
+                    ClientHandler client = new ClientHandler(clientSocket, this, message.firstUserID);
                     clients.add(client);
 
                     new Thread(client).start();
                 }
+                
+                
                
             }
         } catch (IOException ex) {
