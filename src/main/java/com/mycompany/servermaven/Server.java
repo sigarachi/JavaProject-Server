@@ -7,12 +7,18 @@ package com.mycompany.servermaven;
 
 /**
  *
- * @author lalal
+ * @author1 lalal
+ * @author2 Toropchinov
+ * 
  */
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -31,13 +37,21 @@ public class Server extends ScriptObject {
     private ArrayList<LoginHandler> clientsOnLogin = new ArrayList<LoginHandler>();
    
     
-    public Server(){
+    public Server() throws ClassNotFoundException, SQLException{
+        
         Socket clientSocket = null;
         
         ServerSocket serverSocket = null;
         
+        String dbUser = "postgres";
+        String dbPassword = "root";
+        String dbUrl = "jdbc:postgresql://localhost:5432/node_postgres";
+        String drvName = "org.postgresql.Driver";
+
+        Connection conDatabase = null;
         
-        
+        Class.forName(drvName);
+        conDatabase = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
         
         try {
             serverSocket = new ServerSocket(PORT);
@@ -46,13 +60,11 @@ public class Server extends ScriptObject {
             while(true){
                 clientSocket = serverSocket.accept();
                 
-               
-                
                 ObjectMapper mapper = new ObjectMapper();
                 JInputMessage message = mapper.readValue(clientSocket.toString(), JInputMessage.class);
                 
                 if(message.type.equals("login")){
-                    LoginHandler login = new LoginHandler(clientSocket, this, message);
+                    LoginHandler login = new LoginHandler(clientSocket, this, message, conDatabase);
                     clientsOnLogin.add(login);
                     new Thread(login).start();
                 }
