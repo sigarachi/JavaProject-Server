@@ -17,6 +17,7 @@ import java.util.ArrayList;
  * @author2 Toropchinov
  *
  */
+
 public class ChatHandler implements Runnable {
 
     private ArrayList<ClientHandler> clients;
@@ -40,8 +41,7 @@ public class ChatHandler implements Runnable {
         try {
             while (true) {
                 boolean chatFounded = false;
-                //Ищем чат по chatID в бд и создаем новое сообщение с данным id пользователя и текстом
-                //Question?  может по user1 user2 искать?
+                //Ищем чат по userid1 и userid2 в бд и возвращаем chatID
 
                 //запрос в БД
                 String csql = "SELECT chatID FROM chats WHERE firstUserID= '" + firstUserID + "' "
@@ -69,7 +69,7 @@ public class ChatHandler implements Runnable {
               }
                  */
             }
-        } catch (Exception ex) {
+        } catch (SQLException ex) {
             ex.getStackTrace();
         }
     }
@@ -100,7 +100,5 @@ public class ChatHandler implements Runnable {
             int chatID = rs.getInt("chatID");
             break;
         }
-
     }
-
 }
