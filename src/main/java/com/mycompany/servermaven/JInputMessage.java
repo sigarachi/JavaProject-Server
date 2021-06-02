@@ -15,4 +15,5 @@ public class JInputMessage {
     public String password;
     public int chatID;
     public String userID;
+    public String userMessage;
 }

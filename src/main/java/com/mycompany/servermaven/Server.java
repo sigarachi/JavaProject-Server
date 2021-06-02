@@ -29,7 +29,7 @@ public class Server extends ScriptObject {
     static final int PORT = 5000;
     private ArrayList<ClientHandler> clients = new ArrayList<ClientHandler>();
     private ArrayList<LoginHandler> clientsOnLogin = new ArrayList<LoginHandler>();
-    private ArrayList<ChatHandler> chats = new ArrayList<ChatHandler>();
+   
     
     public Server(){
         Socket clientSocket = null;
@@ -57,11 +57,11 @@ public class Server extends ScriptObject {
                     new Thread(login).start();
                 }
                 
-                if(message.type.equals("goingToChat")){
-                    ChatHandler chat = new ChatHandler(message.chatID, clients);
-                    chats.add(chat);
+                if(message.type.equals("message")){
+                    ChatHandler chat = new ChatHandler(message.chatID, clients, Integer.parseInt(message.userID), message.userMessage);
                     
                     new Thread(chat).start();
+                    
                 }
                 
                 if(message.type.equals("clientOnline")){
@@ -108,9 +108,7 @@ public class Server extends ScriptObject {
         clientsOnLogin.remove(login);
     }
     
-    public void removeChat(ChatHandler chat){
-        chats.remove(chat);
-    }
+   
     
     
 }

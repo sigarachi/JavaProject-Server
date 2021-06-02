@@ -14,16 +14,40 @@ import java.util.ArrayList;
 public class ChatHandler implements Runnable {
     private ArrayList<ClientHandler> clients;
     private int chatID;
+    private int userID;
+    private String userMessage;
     
-    public ChatHandler(int chatID, ArrayList clients){
+    public ChatHandler(int chatID, ArrayList clients, int userID, String userMessage){
         this.clients = clients;
         this.chatID = chatID;
+        this.userID = userID;
     }
     
+  
+   @Override
+   public void run(){
+       try{
+           while(true){
+               //Ищем чат по chatID в бд и создаем новое сообщение с данным id пользователя и текстом
+               
+              /* Это код ответа, он будет дописан после бд
+              for(int i = 0; i < clients.size(); i++){
+                  ClientHandler client = clients.get(i);
+                  if(client.getUser().getUserID() == userID && client.getUser().isOnline()){
+                      
+                  }
+              }
+                */
+           }
+       }catch(Exception ex){
+           ex.getStackTrace();
+       }
+   }
+   
+   private void sendResponse(){
+       
+   }
     
     
-    @Override
-    public void run(){
-        
-    }
+   
 }

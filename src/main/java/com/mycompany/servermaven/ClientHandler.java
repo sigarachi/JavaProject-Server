@@ -50,11 +50,6 @@ public class ClientHandler implements Runnable {
     public void run(){
         try{
             while(true){
-                server.sendMessageToAllClients("New client connected");
-                server.sendMessageToAllClients("Clients = " + clients_count);
-                break;
-            }
-            while(true){
                 if(messageIn.hasNext()){
                     String clientMessage = messageIn.nextLine();
                     if(clientMessage.equalsIgnoreCase("##session##end##")){
@@ -88,9 +83,15 @@ public class ClientHandler implements Runnable {
         }
     }
     
+    public User getUser(){
+        return this.user;
+    }
+    
     public void close(){
         server.removeClient(this);
         clients_count--;
         server.sendMessageToAllClients("Clients = " + clients_count);
+        
+       
     }
 }
