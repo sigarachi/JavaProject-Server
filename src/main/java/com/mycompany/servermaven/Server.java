@@ -37,7 +37,7 @@ public class Server extends ScriptObject {
     private ArrayList<LoginHandler> clientsOnLogin = new ArrayList<LoginHandler>();
    
     
-    public Server() throws ClassNotFoundException, SQLException{
+    public Server() {
         
         Socket clientSocket = null;
         
@@ -50,8 +50,15 @@ public class Server extends ScriptObject {
 
         Connection conDatabase = null;
         
-        Class.forName(drvName);
-        conDatabase = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
+        try {
+            Class.forName(drvName);
+            conDatabase = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         
         try {
             serverSocket = new ServerSocket(PORT);
