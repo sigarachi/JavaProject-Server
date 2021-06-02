@@ -5,14 +5,22 @@
  */
 package com.mycompany.servermaven;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author lalal
  */
 public class ChatHandler implements Runnable {
-    public ChatHandler(int chat_id){
-        
+    private ArrayList<ClientHandler> clients;
+    private int chatID;
+    
+    public ChatHandler(int chatID, ArrayList clients){
+        this.clients = clients;
+        this.chatID = chatID;
     }
+    
+    
     
     @Override
     public void run(){

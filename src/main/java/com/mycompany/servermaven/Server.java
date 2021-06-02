@@ -58,7 +58,7 @@ public class Server extends ScriptObject {
                 }
                 
                 if(message.type.equals("goingToChat")){
-                    ChatHandler chat = new ChatHandler(message.chatID);
+                    ChatHandler chat = new ChatHandler(message.chatID, clients);
                     chats.add(chat);
                     
                     new Thread(chat).start();
