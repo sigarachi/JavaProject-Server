@@ -15,14 +15,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import jdk.nashorn.internal.runtime.ScriptObject;
 
 public class Server extends ScriptObject {
@@ -39,9 +37,8 @@ public class Server extends ScriptObject {
 
         String dbUser = "postgres";
         String dbPassword = "root";
-        String dbUrl = "jdbc:postgresql://localhost:5432/node_postgres";
+        String dbUrl = "jdbc:postgresql://localhost:5432/iatemessenger";
         String drvName = "org.postgresql.Driver";
-
         Connection conDatabase = null;
 
         try {
@@ -52,7 +49,6 @@ public class Server extends ScriptObject {
 
             while (true) {
                 clientSocket = serverSocket.accept();
-
                 ObjectMapper mapper = new ObjectMapper();
                 JInputMessage message = mapper.readValue(clientSocket.toString(), JInputMessage.class);
 
