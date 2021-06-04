@@ -7,7 +7,7 @@ package com.mycompany.servermaven;
 
 /**
  *
- * @author lalal    
+ * @author Dmitriev    
  */
 public class Main {
     public static void main(String[] args) {

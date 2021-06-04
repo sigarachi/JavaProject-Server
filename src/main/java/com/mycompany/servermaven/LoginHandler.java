@@ -18,8 +18,9 @@ import org.json.JSONObject;
 
 /**
  *
- * @author1 lalal
+ * @author1 Dmitriev
  * @author2 Toropchinov
+ *   
  * 
  */
 public class LoginHandler implements Runnable {
