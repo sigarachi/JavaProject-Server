@@ -14,7 +14,9 @@ package com.mycompany.servermaven;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.Connection;
@@ -31,7 +33,7 @@ public class Server extends ScriptObject {
     static final int PORT = 5905;
     private ArrayList<ClientHandler> clients = new ArrayList<ClientHandler>();
     private ArrayList<LoginHandler> clientsOnLogin = new ArrayList<LoginHandler>();
-    private Scanner clientInputStream ;
+    private BufferedReader clientInputStream ;
 
     public Server() {
 
@@ -53,39 +55,34 @@ public class Server extends ScriptObject {
 
             while (true) {
                 clientSocket = serverSocket.accept();
-                clientInputStream = new Scanner(clientSocket.getInputStream());
-                
-                System.out.println("ClientInputStream 1" + clientInputStream.toString());
-                
-                if(clientInputStream.hasNext()){
-                    
-                    System.out.println("ClientInputStream 2" + clientInputStream.toString());
-                    
-                    ObjectMapper mapper = new ObjectMapper();
-                    JInputMessage message = mapper.readValue(clientSocket.toString(), JInputMessage.class);
-                    //System.out.println("message" + message.toString());
-                    
-                    if (message.type.equals("login")) {
-                        //System.out.println("login");
-                        LoginHandler login = new LoginHandler(clientSocket, this, message, conDatabase);
-                        clientsOnLogin.add(login);
-                        new Thread(login).start();
-                    }
+                clientInputStream = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                String input = clientInputStream.readLine();
 
-                    if (message.type.equals("message")) {
-                        ChatHandler chat = new ChatHandler(message.chatID, clients, Integer.parseInt(message.firstUserID), Integer.parseInt(message.secondUserID), message.userMessage, conDatabase);
+                ObjectMapper mapper = new ObjectMapper();
+                JInputMessage message = mapper.readValue(input, JInputMessage.class);
+                //System.out.println("message" + message.toString());
 
-                        new Thread(chat).start();
-
-                    }
-
-                    if (message.type.equals("clientOnline")) {
-                        ClientHandler client = new ClientHandler(clientSocket, this, message.firstUserID);
-                        clients.add(client);
-
-                        new Thread(client).start();
-                    }
+                if (message.type.equals("login")) {
+                    System.out.println("login");
+                    LoginHandler login = new LoginHandler(clientSocket, this, message, conDatabase);
+                    clientsOnLogin.add(login);
+                    new Thread(login).start();
                 }
+
+                if (message.type.equals("message")) {
+                    ChatHandler chat = new ChatHandler(message.chatID, clients, Integer.parseInt(message.firstUserID), Integer.parseInt(message.secondUserID), message.userMessage, conDatabase);
+
+                    new Thread(chat).start();
+
+                }
+
+                if (message.type.equals("clientOnline")) {
+                    ClientHandler client = new ClientHandler(clientSocket, this, message.firstUserID);
+                    clients.add(client);
+
+                    new Thread(client).start();
+                }
+
                 
 
             }
