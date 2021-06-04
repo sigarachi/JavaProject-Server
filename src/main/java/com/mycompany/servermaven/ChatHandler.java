@@ -124,7 +124,7 @@ public class ChatHandler implements Runnable {
         st.executeQuery(csql2);
         ResultSet rs = st.executeQuery(csql2);
  
-        while (rs.next()) {
+        if (rs.next()) {
             int chatID = rs.getInt("chatID");
             JSONObject res = new JSONObject();
             res.put("type", "recivedChat");
@@ -132,7 +132,12 @@ public class ChatHandler implements Runnable {
             res.put("chatName", secondUserID);
             messageToClient.println(res);
             messageToClient.flush();
-            break;
+        }else {
+            JSONObject res = new JSONObject();
+            res.put("type", "invalid");
+            res.put("error", "Ошибка создания чата");
+            messageToClient.println(res);
+            messageToClient.flush();
         }
     }
 }

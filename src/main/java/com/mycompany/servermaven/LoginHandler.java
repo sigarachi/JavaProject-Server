@@ -61,16 +61,22 @@ public class LoginHandler implements Runnable {
             ResultSet rs = st.executeQuery(csql);
             
             //вернули userID и user_login
-            while(rs.next()){
+            if(rs.next()){
                 int id = rs.getInt ("userID");
                 //String login = rs.getString("user_login");
                 JSONObject res = new JSONObject();
                 res.put("type", "success");
                 res.put("userID", id);
-                
                 messageToClient.println(res);
                 messageToClient.flush();
-            break;
+                //break;
+            }
+            else {
+                JSONObject res = new JSONObject();
+                res.put("type", "invalid");
+                res.put("error","Пользователь не найден");
+                messageToClient.println(res);
+                messageToClient.flush();
             }
 
         }catch(Exception ex){
