@@ -21,6 +21,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import jdk.nashorn.internal.runtime.ScriptObject;
@@ -30,6 +31,7 @@ public class Server extends ScriptObject {
     static final int PORT = 5000;
     private ArrayList<ClientHandler> clients = new ArrayList<ClientHandler>();
     private ArrayList<LoginHandler> clientsOnLogin = new ArrayList<LoginHandler>();
+    private Scanner clientInputStream ;
 
     public Server() {
 
@@ -51,28 +53,32 @@ public class Server extends ScriptObject {
 
             while (true) {
                 clientSocket = serverSocket.accept();
-                ObjectMapper mapper = new ObjectMapper();
-                JInputMessage message = mapper.readValue(clientSocket.toString(), JInputMessage.class);
+                clientInputStream = new Scanner(clientSocket.getInputStream());
+                if(clientInputStream.hasNext()){
+                    ObjectMapper mapper = new ObjectMapper();
+                    JInputMessage message = mapper.readValue(clientSocket.toString(), JInputMessage.class);
 
-                if (message.type.equals("login")) {
-                    LoginHandler login = new LoginHandler(clientSocket, this, message, conDatabase);
-                    clientsOnLogin.add(login);
-                    new Thread(login).start();
+                    if (message.type.equals("login")) {
+                        LoginHandler login = new LoginHandler(clientSocket, this, message, conDatabase);
+                        clientsOnLogin.add(login);
+                        new Thread(login).start();
+                    }
+
+                    if (message.type.equals("message")) {
+                        ChatHandler chat = new ChatHandler(message.chatID, clients, Integer.parseInt(message.firstUserID), Integer.parseInt(message.secondUserID), message.userMessage, conDatabase);
+
+                        new Thread(chat).start();
+
+                    }
+
+                    if (message.type.equals("clientOnline")) {
+                        ClientHandler client = new ClientHandler(clientSocket, this, message.firstUserID);
+                        clients.add(client);
+
+                        new Thread(client).start();
+                    }
                 }
-
-                if (message.type.equals("message")) {
-                    ChatHandler chat = new ChatHandler(message.chatID, clients, Integer.parseInt(message.firstUserID), Integer.parseInt(message.secondUserID), message.userMessage, conDatabase);
-
-                    new Thread(chat).start();
-
-                }
-
-                if (message.type.equals("clientOnline")) {
-                    ClientHandler client = new ClientHandler(clientSocket, this, message.firstUserID);
-                    clients.add(client);
-
-                    new Thread(client).start();
-                }
+                
 
             }
         } catch (IOException ex) {
@@ -84,9 +90,14 @@ public class Server extends ScriptObject {
         } finally {
             try {
                 // закрываем подключение
-                clientSocket.close();
-                System.out.println("Server has been stopped");
-                serverSocket.close();
+                if(clientSocket != null){
+                    clientSocket.close();
+                   
+                }
+                if(serverSocket != null){
+                    System.out.println("Server has been stopped");
+                    serverSocket.close();
+                }
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
