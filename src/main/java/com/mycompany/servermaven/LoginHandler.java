@@ -14,6 +14,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.json.JSONObject;
 
 /**
  *
@@ -63,6 +64,13 @@ public class LoginHandler implements Runnable {
             while(rs.next()){
                 int id = rs.getInt ("userID");
                 String login = rs.getString("user_login");
+                
+                JSONObject req = new JSONObject();
+                req.put("type", "success");
+                req.put("userID", id);
+                
+                messageToClient.println(req);
+                messageToClient.flush();
             break;
             }
 
