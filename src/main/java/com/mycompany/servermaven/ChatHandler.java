@@ -18,6 +18,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.json.JSONObject;
  
 /**
  *
@@ -38,14 +39,17 @@ public class ChatHandler implements Runnable {
     
     private BufferedReader clientInputStream ;
     private PrintWriter clientOutputStream;
+    
+    private PrintWriter messageToClient;
  
-    public ChatHandler(Socket clientSocket ,int chatID, ArrayList clients, int firstUserID, int secondUserID, String userMessage, Connection conDb) {
+    public ChatHandler(Socket clientSocket ,int chatID, ArrayList clients, int firstUserID, int secondUserID, String userMessage, Connection conDb) throws IOException {
         this.clients = clients;
         this.chatID = chatID;
         this.firstUserID = firstUserID;
         this.secondUserID = secondUserID;
         this.conDatabase = conDb;
         this.client = clientSocket;
+        this.messageToClient = new PrintWriter(clientSocket.getOutputStream());
     }
  
     @Override
@@ -68,6 +72,13 @@ public class ChatHandler implements Runnable {
                 //вернули chatID
                 while (rs.next()) {
                     int chatID = rs.getInt("chatID");
+                    
+                    JSONObject res = new JSONObject();
+                    res.put("type", "recivedChat");
+                    res.put("chatID", chatID);
+                    res.put("chatName", secondUserID);
+                    messageToClient.println(res);
+                    messageToClient.flush();
                     break;
                 }
                 if (!chatFounded) {
@@ -115,6 +126,12 @@ public class ChatHandler implements Runnable {
  
         while (rs.next()) {
             int chatID = rs.getInt("chatID");
+            JSONObject res = new JSONObject();
+            res.put("type", "recivedChat");
+            res.put("chatID", chatID);
+            res.put("chatName", secondUserID);
+            messageToClient.println(res);
+            messageToClient.flush();
             break;
         }
     }

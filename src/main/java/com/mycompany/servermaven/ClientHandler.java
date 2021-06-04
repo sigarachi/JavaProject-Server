@@ -30,6 +30,8 @@ public class ClientHandler implements Runnable {
     private Socket clientSocket = null;
 
     private static int clients_count = 0;
+    
+    private PrintWriter messageToClient;
 
     public ClientHandler(Socket socket, Server server, String userID) {
         try {
