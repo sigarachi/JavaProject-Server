@@ -127,5 +127,4 @@ public class Server extends ScriptObject {
     public void removeClientOnLogin(LoginHandler login) {
         clientsOnLogin.remove(login);
     }
-
 }

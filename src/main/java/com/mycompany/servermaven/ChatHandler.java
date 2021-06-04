@@ -76,7 +76,7 @@ public class ChatHandler implements Runnable {
     }
 
     private void sendResponse() {
-
+        
     }
 
     private void createNew() throws SQLException {
