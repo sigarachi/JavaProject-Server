@@ -28,7 +28,7 @@ import jdk.nashorn.internal.runtime.ScriptObject;
 
 public class Server extends ScriptObject {
 
-    static final int PORT = 5000;
+    static final int PORT = 5905;
     private ArrayList<ClientHandler> clients = new ArrayList<ClientHandler>();
     private ArrayList<LoginHandler> clientsOnLogin = new ArrayList<LoginHandler>();
     private Scanner clientInputStream ;
@@ -54,11 +54,19 @@ public class Server extends ScriptObject {
             while (true) {
                 clientSocket = serverSocket.accept();
                 clientInputStream = new Scanner(clientSocket.getInputStream());
+                
+                System.out.println("ClientInputStream 1" + clientInputStream.toString());
+                
                 if(clientInputStream.hasNext()){
+                    
+                    System.out.println("ClientInputStream 2" + clientInputStream.toString());
+                    
                     ObjectMapper mapper = new ObjectMapper();
                     JInputMessage message = mapper.readValue(clientSocket.toString(), JInputMessage.class);
-
+                    //System.out.println("message" + message.toString());
+                    
                     if (message.type.equals("login")) {
+                        //System.out.println("login");
                         LoginHandler login = new LoginHandler(clientSocket, this, message, conDatabase);
                         clientsOnLogin.add(login);
                         new Thread(login).start();
