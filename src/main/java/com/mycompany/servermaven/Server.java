@@ -43,7 +43,7 @@ public class Server extends ScriptObject {
 
         String dbUser = "postgres";
         String dbPassword = "root";
-        String dbUrl = "jdbc:postgresql://localhost:5432/iatemessenger";
+        String dbUrl = "jdbc:postgresql://localhost:5432/postgres";
         String drvName = "org.postgresql.Driver";
         Connection conDatabase = null;
 
@@ -70,10 +70,8 @@ public class Server extends ScriptObject {
                 }
 
                 if (message.type.equals("message")) {
-                    ChatHandler chat = new ChatHandler(message.chatID, clients, Integer.parseInt(message.firstUserID), Integer.parseInt(message.secondUserID), message.userMessage, conDatabase);
-
+                    ChatHandler chat = new ChatHandler(clientSocket ,message.chatID, clients, Integer.parseInt(message.firstUserID), Integer.parseInt(message.secondUserID), message.userMessage, conDatabase);
                     new Thread(chat).start();
-
                 }
 
                 if (message.type.equals("clientOnline")) {

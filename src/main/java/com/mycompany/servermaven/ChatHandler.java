@@ -6,11 +6,18 @@
 
 package com.mycompany.servermaven;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -26,15 +33,19 @@ public class ChatHandler implements Runnable {
     private int firstUserID;
     private String userMessage;
     private int secondUserID;
-
+    private Socket client;
     private Connection conDatabase;
+    
+    private BufferedReader clientInputStream ;
+    private PrintWriter clientOutputStream;
 
-    public ChatHandler(int chatID, ArrayList clients, int firstUserID, int secondUserID, String userMessage, Connection conDb) {
+    public ChatHandler(Socket clientSocket ,int chatID, ArrayList clients, int firstUserID, int secondUserID, String userMessage, Connection conDb) {
         this.clients = clients;
         this.chatID = chatID;
         this.firstUserID = firstUserID;
         this.secondUserID = secondUserID;
         this.conDatabase = conDb;
+        this.client = clientSocket;
     }
 
     @Override
@@ -42,6 +53,8 @@ public class ChatHandler implements Runnable {
         try {
             while (true) {
                 boolean chatFounded = false;
+                this.clientInputStream = new BufferedReader(new InputStreamReader(client.getInputStream()));
+                this.clientOutputStream = new PrintWriter(client.getOutputStream());
                 //Ищем чат по userid1 и userid2 в бд и возвращаем chatID
 
                 //запрос в БД
@@ -72,11 +85,14 @@ public class ChatHandler implements Runnable {
             }
         } catch (SQLException ex) {
             ex.getStackTrace();
+        } catch (IOException ex) {
+            Logger.getLogger(ChatHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     private void sendResponse() {
-
+           this.clientOutputStream.println("sss");
+           this.clientOutputStream.flush();
     }
 
     private void createNew() throws SQLException {
