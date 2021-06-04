@@ -62,8 +62,8 @@ public class ChatHandler implements Runnable {
                 //Ищем чат по userid1 и userid2 в бд и возвращаем chatID
  
                 //запрос в БД
-                String csql = "SELECT chatID FROM chats WHERE firstUserID= '" + firstUserID + "' "
-                        + "AND secondUserID = '" + secondUserID + "'";
+                String csql = "SELECT chatid FROM chats WHERE first_userid= '" + firstUserID + "' "
+                        + "AND second_userid = '" + secondUserID + "'";
  
                 Statement st = conDatabase.createStatement();
                 st.executeQuery(csql);
@@ -71,7 +71,7 @@ public class ChatHandler implements Runnable {
  
                 //вернули chatID
                 while (rs.next()) {
-                    int chatID = rs.getInt("chatID");
+                    int chatID = rs.getInt("chatid");
                     
                     JSONObject res = new JSONObject();
                     res.put("type", "recivedChat");
@@ -111,15 +111,15 @@ public class ChatHandler implements Runnable {
         //возвращаем chatID нашего нового чата
  
         //создаем новый чат (добавляем 2 пользователей в таблицу)
-        String csql1 = "INSERT INTO chats (firstUserID, secondUserID) VALUES"
+        String csql1 = "INSERT INTO chats (first_userid, second_userid) VALUES"
                 + "('" + firstUserID + "','" + secondUserID + "')";
  
         Statement st = conDatabase.createStatement();
         st.executeUpdate(csql1);
  
         //возвращаем наш chatID
-        String csql2 = "SELECT chatID FROM chats WHERE firstUserID= '" + firstUserID + "' "
-                + "AND secondUserID = '" + secondUserID + "'";
+        String csql2 = "SELECT chatid FROM chats WHERE first_userid= '" + firstUserID + "' "
+                + "AND second_userid = '" + secondUserID + "'";
  
         st.executeQuery(csql2);
         ResultSet rs = st.executeQuery(csql2);

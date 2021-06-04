@@ -30,7 +30,7 @@ import jdk.nashorn.internal.runtime.ScriptObject;
  
 public class Server extends ScriptObject {
  
-    static final int PORT = 5905;
+    static final int PORT = 5600;
     private ArrayList<ClientHandler> clients = new ArrayList<ClientHandler>();
     private ArrayList<LoginHandler> clientsOnLogin = new ArrayList<LoginHandler>();
     private BufferedReader clientInputStream ;

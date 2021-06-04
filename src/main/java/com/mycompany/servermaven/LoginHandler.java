@@ -52,7 +52,7 @@ public class LoginHandler implements Runnable {
     public void run(){
         try{
             //запрос в БД
-            String csql = "SELECT userID, user_login FROM users WHERE user_login= '" +clientLogin+ "' "
+            String csql = "SELECT userID, user_login FROM chatusers WHERE user_login= '" +clientLogin+ "' "
                     + "AND user_password = '"+clientPassword+"'";    
             
             //Создали statement 
@@ -62,7 +62,7 @@ public class LoginHandler implements Runnable {
             
             //вернули userID и user_login
             if(rs.next()){
-                int id = rs.getInt ("userID");
+                int id = rs.getInt ("userid");
                 //String login = rs.getString("user_login");
                 JSONObject res = new JSONObject();
                 res.put("type", "success");
