@@ -65,11 +65,11 @@ public class LoginHandler implements Runnable {
                 int id = rs.getInt ("userID");
                 String login = rs.getString("user_login");
                 
-                JSONObject req = new JSONObject();
-                req.put("type", "success");
-                req.put("userID", id);
+                JSONObject res = new JSONObject();
+                res.put("type", "success");
+                res.put("userID", id);
                 
-                messageToClient.println(req);
+                messageToClient.println(res);
                 messageToClient.flush();
             break;
             }
