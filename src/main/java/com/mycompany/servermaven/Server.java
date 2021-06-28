@@ -43,7 +43,7 @@ public class Server extends ScriptObject {
  
         String dbUser = "postgres";
         String dbPassword = "root";
-        String dbUrl = "jdbc:postgresql://localhost:5432/iatemessenger";
+        String dbUrl = "jdbc:postgresql://localhost:5432/postgres";
         String drvName = "org.postgresql.Driver";
         Connection conDatabase = null;
  
