@@ -7,9 +7,9 @@ package com.mycompany.servermaven;
  
 /**
  *
- * @author1 lalal
+ * @author1 Dmitriev
  * @author2 Toropchinov
- *
+ * 
  */
  
  
@@ -31,7 +31,7 @@ import jdk.nashorn.internal.runtime.ScriptObject;
 public class Server extends ScriptObject {
  
     static final int PORT = 5600;
-    private ArrayList<ClientHandler> clients = new ArrayList<ClientHandler>();
+    
     private ArrayList<LoginHandler> clientsOnLogin = new ArrayList<LoginHandler>();
     private BufferedReader clientInputStream ;
  
@@ -52,10 +52,12 @@ public class Server extends ScriptObject {
             conDatabase = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
             serverSocket = new ServerSocket(PORT);
             System.out.println("Server started on port = " + PORT);
- 
+            clientSocket = serverSocket.accept();
+            clientInputStream = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             while (true) {
-                clientSocket = serverSocket.accept();
-                clientInputStream = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                
+                
+                
                 String input = clientInputStream.readLine();
  
                 ObjectMapper mapper = new ObjectMapper();
@@ -70,16 +72,28 @@ public class Server extends ScriptObject {
                 }
  
                 if (message.type.equals("message")) {
-                    ChatHandler chat = new ChatHandler(clientSocket ,message.chatID, clients, Integer.parseInt(message.firstUserID), Integer.parseInt(message.secondUserID), message.userMessage, conDatabase);
+                    ChatHandler chat = new ChatHandler(clientSocket ,message.chatID, Integer.parseInt(message.firstUserID), Integer.parseInt(message.secondUserID), message.userMessage, conDatabase);
                     new Thread(chat).start();
                 }
- 
-                if (message.type.equals("clientOnline")) {
-                    ClientHandler client = new ClientHandler(clientSocket, this, message.firstUserID);
-                    clients.add(client);
- 
-                    new Thread(client).start();
+                
+                if(message.type.equals("getChat")){
+                    System.out.println("getChat");
+                    ChatHandler chat = new ChatHandler(clientSocket, Integer.parseInt(message.firstUserID), message.secondUserID,  conDatabase);
+                    new Thread(chat).start();
                 }
+                
+                if(message.type.equals("getMessages")){
+                    System.out.println("getMessages");
+                    MessageHandler mes = new MessageHandler(clientSocket, message.chatID, Integer.parseInt(message.firstUserID), 0, " ", conDatabase);
+                    new Thread(mes).start();
+                }
+                if(message.type.equals("recivedMessage")){
+                    System.out.println("recivedMessage");
+                    MessageHandler mes = new MessageHandler(clientSocket, message.chatID, Integer.parseInt(message.firstUserID), Integer.parseInt(message.secondUserID), message.userMessage, conDatabase);
+                    new Thread(mes).start();
+                }
+ 
+                
  
                 
  
@@ -93,10 +107,7 @@ public class Server extends ScriptObject {
         } finally {
             try {
                 // закрываем подключение
-                if(clientSocket != null){
-                    clientSocket.close();
-                   
-                }
+                
                 if(serverSocket != null){
                     System.out.println("Server has been stopped");
                     serverSocket.close();
@@ -107,20 +118,11 @@ public class Server extends ScriptObject {
         }
     }
  
-    public void sendMessageToAllClients(String msg) {
-        for (ClientHandler o : clients) {
-            o.sendMsg(msg);
-        }
-    }
+    
  
-    protected void setDualFields() {
- 
-    }
- 
+    
     // удаляем клиента из коллекции при выходе из чата
-    public void removeClient(ClientHandler client) {
-        clients.remove(client);
-    }
+    
  
     public void removeClientOnLogin(LoginHandler login) {
         clientsOnLogin.remove(login);

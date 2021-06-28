@@ -7,7 +7,10 @@ package com.mycompany.servermaven;
 
 /**
  *
- * @author lalal
+ * @author1 Dmitriev
+ * @author2 Toropchinov
+ *   
+ * 
  */
 public class JInputMessage {
     public String type;
@@ -17,4 +20,5 @@ public class JInputMessage {
     public String firstUserID;
     public String secondUserID;
     public String userMessage;
+    public String userID;
 }

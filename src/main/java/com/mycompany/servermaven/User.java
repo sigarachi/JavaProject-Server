@@ -7,7 +7,10 @@ package com.mycompany.servermaven;
 
 /**
  *
- * @author lalal
+ * @author1 Dmitriev
+ * @author2 Toropchinov
+ *   
+ * 
  */
 public class User {
     private int userID;
